@@ -19,5 +19,11 @@ export default (state = defaultState, action) => {
         return newState;
     }
 
+    if (action.type === actionTypes.INIT_LIST_ACTION) {
+        const newState = JSON.parse(JSON.stringify(state));
+        newState.list = action.data;
+        return newState;
+    }
+
     return state;
 }

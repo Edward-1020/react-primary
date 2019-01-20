@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import * as actionTypes from './store/actionTypes';
+import * as actionCreators from './store/actionCreators';
 import 'antd/dist/antd.css';
 import { Input, Button, List } from 'antd';
 import store from './store/index';
-  
+import axios from 'axios';  
 
 class TodoList extends Component {
     constructor (props) {
@@ -52,12 +52,7 @@ class TodoList extends Component {
     }
 
     handleInputChange (e) {
-        const action = {
-            type: actionTypes.CHANGE_INPUT_VALUE,
-            value: e.target.value
-        }
-
-        store.dispatch(action);
+        store.dispatch(actionCreators.getInputChangeAction(e.target.value));
     }
 
     handleStoreChange () {
@@ -65,10 +60,14 @@ class TodoList extends Component {
     }
 
     handleBtnClick () {
-        const action = {
-            type: actionTypes.ADD_TODO_ITEM,
-        }
-        store.dispatch(action);
+        store.dispatch(actionCreators.getAddItemAction());
+    }
+
+    componentDidMount () {
+        axios.get('/list.json').then((res => {
+            const data = res.data;
+            store.dispatch(actionCreators.initListAction(data));
+        }))
     }
 }
 
